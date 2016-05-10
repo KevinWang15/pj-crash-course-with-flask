@@ -95,8 +95,7 @@ def page_list():
 def page_list_post():
     if request.form['delete'] != None:
 
-        user = get_authed_user()
-        if user['user_type'] != 1:
+        if g.authedUser['user_type'] != 1:
             flash(u"No privilege", 'error')
             return redirect('/')
 
@@ -114,15 +113,18 @@ def page_list_post():
 @app.route("/item/<id>")
 def page_item(id):
     post = get_post(id)
-    return render_template("item.html", post=post)
+    cursor = dbConnection.cursor()
+    cursor.execute(
+        'select content,time,name,reply.id from reply left join user on reply.user_id=user.id where post_id=%s', [id])
+    replies = cursor.fetchall()
+    return render_template("item.html", post=post, replies=replies)
 
 
 @app.route("/item/<id>", methods=["POST"])
 def page_item_post(id):
     if request.form['action'] == 'delete':
 
-        user = get_authed_user()
-        if user['user_type'] != 1:
+        if g.authedUser['user_type'] != 1:
             flash(u"No privilege", 'error')
             return redirect('/item/' + id)
 
@@ -131,6 +133,31 @@ def page_item_post(id):
 
         flash(u"删除成功！", 'success')
         return redirect('/')
+
+    elif request.form['action'].startswith('delete-reply:'):
+
+        cursor = dbConnection.cursor()
+
+        if g.authedUser['user_type'] != 1:
+            flash(u"No privilege", 'error')
+            return redirect('/item/' + id)
+
+        cursor.execute('delete from reply where id = %s', [request.form['action'][13:]])
+        flash(u"删除成功！", 'success')
+        return redirect('/item/' + id)
+
+    elif request.form['action'] == 'reply':
+        if len(request.form['reply']) < 3:
+            flash(u"回复太短！", 'error')
+            return redirect('/item/' + id)
+
+        cursor = dbConnection.cursor()
+        cursor.execute('INSERT into reply (user_id,post_id,content,time) values (%s,%s,%s,now())',
+                       [g.authedUser['id'], id, request.form['reply']])
+
+        flash(u"回复成功！", 'success')
+        return redirect('/item/' + id)
+
 
     else:
         flash(u"action not supported", 'error')

@@ -11,23 +11,60 @@
         {{ post.name }} 发布于 {{ post.time }}
     </h5>
 
-    <p style="font-size: 20px;line-height: 1.2em">
-        {{ post.content }}
-    </p>
-
-    <a class="btn btn-primary" href="/">
-        返回
-    </a>
+    <pre>{{ post.content }}</pre>
 
     {% if g.authedUser != None and g.authedUser.user_type==1 %}
 
-        <form action="" method="post">
+        <form action="" method="post" style="display: inline-block">
             <input type="hidden" value="delete" name="action">
-            <button style="margin-left: 4px;">
+            <button class="btn btn-danger" style="margin-left: 4px;">
                 删除本帖
             </button>
         </form>
 
     {% endif %}
+
+    <h3>
+        Replies
+    </h3>
+
+    {% for reply in replies %}
+        <div style="padding-left: 20px;">
+            <h4 style="margin-bottom: 4px;">
+                {{ reply[2] }}
+                <small>{{ reply[1] }}</small>
+
+                {% if g.authedUser != None and g.authedUser.user_type==1 %}
+                    <form method="post" style="display: inline-block">
+                        <input type="hidden" name="action" value="delete-reply:{{ reply[3] }}">
+                        <button class="btn btn-danger btn-sm">删除</button>
+                    </form>
+                {% endif %}
+            </h4>
+            <p style="padding-left: 20px;white-space: pre;line-height: 1.2em">{{ reply[0] }}</p>
+        </div>
+    {% endfor %}
+
+    {% if(g.authedUser!=None) %}
+
+        <h3>
+            Leave your reply
+        </h3>
+        <form method="post">
+            <input type="hidden" value="reply" name="action">
+            <div class="row">
+                <div class="col col-xs-6" style="margin-bottom: 10px;">
+                    <textarea name="reply" class="form-control " cols="30" rows="4"
+                              placeholder="Type your reply here"></textarea>
+                </div>
+            </div>
+            <p>
+                <button class="btn btn-success" type="submit">Send</button>
+                <button class="btn btn-link" type="reset">Reset</button>
+            </p>
+        </form>
+
+    {% endif %}
+
 
 {% endblock %}
