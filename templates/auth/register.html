@@ -1,24 +1,34 @@
 {% extends "base.html" %}
 {% block body %}
+    <div class="row">
+        <form method="POST" class="form-horizontal col col-sm-6 col-sm-offset-3">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="username" placeholder="至少4个字">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">密码</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password" placeholder="至少6个字">
 
-    <form action="" method="POST">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">重复密码</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" name="password-repeat" placeholder="重复输入">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Sign Up</button>
+                    <a href="login" class="btn btn-link">Sign In</a>
 
-        <div>
-            Username:
-            <input type="text" name="username" placeholder="至少4个字">
-        </div>
-        <div>
-            Password:
-            <input type="password" name="password" placeholder="至少6个字">
-        </div>
-        <div>
-            Repeat:
-            <input type="password" name="password-repeat" placeholder="重复输入">
-        </div>
+                </div>
+            </div>
 
-        <div>
-            <button type="submit">提交</button>
-        </div>
-
-    </form>
+        </form>
+    </div>
 {% endblock %}

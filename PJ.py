@@ -48,31 +48,26 @@ def before_request():
     # 在每次request开始时，获得当前已Login的用户
     # 在所有模板中，就可以用 {{ g.authedUser }} 来访问当前用户了！
     g.authedUser = get_authed_user()
+    g.url_path = request.path
 
 
-@app.route('/simulate-login')
-def page_simulate_login():
-    session['user_id'] = 1
-    return redirect('/')
-
-
-@app.route('/logout')
+@app.route('/auth/logout')
 def page_logout():
     flash(u'登出成功', 'success')
     del session['user_id']
     return redirect('/')
 
 
-@app.route('/form')
+@app.route('/new')
 def page_form():
-    return render_template('form.html')
+    return render_template('new.html')
 
 
-@app.route('/form', methods=['POST'])
+@app.route('/new', methods=['POST'])
 def page_form_post():
     if (len(request.form['title']) < 5):
         flash(u'标题太短了！', 'error')
-        return redirect('/form')
+        return redirect('/new')
 
     flash(u'添加成功！', 'success')
 

@@ -7,16 +7,16 @@
         {{ post.title }}
     </h1>
 
-    <p>
+    <h5 style="opacity: 0.6">
         {{ post.name }} 发布于 {{ post.time }}
-    </p>
+    </h5>
 
-    <p>
+    <p style="font-size: 20px;line-height: 1.2em">
         {{ post.content }}
     </p>
 
-    <a href="/">
-        返回列表
+    <a class="btn btn-primary" href="/">
+        返回
     </a>
 
     {% if g.authedUser != None and g.authedUser.user_type==1 %}

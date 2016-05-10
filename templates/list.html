@@ -9,44 +9,50 @@
 
     <h3>
         {% if(g.authedUser!=None) %}
-            You are logged in as {{ g.authedUser.name }}
+            <p>
+                You are logged in as {{ g.authedUser.name }}
+            </p>
+            <p>
+                <a class="btn btn-success" href="/new">New Post</a>
+
+                <a class="btn btn-link" href="/auth/logout">Logout</a>
+            </p>
         {% else %}
-            Hello, guest
+            <p>
+                Hello, guest
+            </p>
+            <p>
+                <a href="/auth/login" class="btn btn-success">Sign In</a>
+                or
+                <a href="/auth/register" class="btn btn-primary">Sign Up</a>
+            </p>
+
         {% endif %}
     </h3>
 
-    <a href="/form">New Post</a>
 
 
-    {% if g.authedUser == None %}
-        <a href="/auth/login">Login</a>
-        <a href="/auth/register">Register</a>
-    {% endif %}
-
-    {% if g.authedUser != None %}
-        <a href="/logout">Logout</a>
-    {% endif %}
 
     <hr>
 
 
-    <ol>
+    <ul>
         {% for item in list %}
-            <li>
+            <li style="position: relative;margin-bottom: 20px">
                 <a href="/item/{{ item.id }}">{{ item.title }}</a>
 
-                <span>{{ item.time }}</span>
+                <small>{{ item.time }}</small>
 
                 {% if g.authedUser != None and g.authedUser.user_type==1 %}
-                    <form action="" method="post">
+                    <form action="" method="post" style="position: absolute;right: 0;top:-6px">
                         <input type="hidden" value="{{ item.id }}" name="delete">
-                        <button style="margin-left: 4px;">
-                            X
+                        <button class="btn btn-danger btn-sm">
+                            删除本帖
                         </button>
                     </form>
                 {% endif %}
 
             </li>
         {% endfor %}
-    </ol>
+    </ul>
 {% endblock %}

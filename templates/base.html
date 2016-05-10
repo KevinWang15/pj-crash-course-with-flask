@@ -11,12 +11,41 @@
     </title>
 </head>
 <body>
-<h1>Welcome to my forum!</h1>
-{% include "partials/error_msg.html" %}
-{% include "partials/success_msg.html" %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">My forum{% if g.authedUser !=None %} - {{ g.authedUser.name }}{% endif %}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="{{ 'active' if  g.url_path=='/' else '' }}"><a href="/">Home</a></li>
 
-{% block body %}
-    my body
-{% endblock %}
+                {% if g.authedUser == None %}
+                    <li class="{{ 'active' if  g.url_path=='/auth/login' else '' }}"><a href="/auth/login">Sign In</a>
+                    </li>
+                    <li class="{{ 'active' if  g.url_path=='/auth/register' else '' }}"><a href="/auth/register">Sign Up</a>
+                    </li>
+                {% endif %}
+
+                {% if g.authedUser != None %}
+                    <li class="{{ 'active' if  g.url_path=='/new' else '' }}"><a href="/new">New Post</a></li>
+                    <li><a href="/auth/logout">Logout</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="padding-top: 90px;">
+
+    {% include "partials/error_msg.html" %}
+    {% include "partials/success_msg.html" %}
+
+    {% block body %}
+        my body
+    {% endblock %}
+</div>
+
 </body>
 </html>
