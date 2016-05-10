@@ -7,16 +7,16 @@
 {% block body %}
 
     <h1>
-        Welcome {% if(user.name!=None) %}{{ user.name }}{% endif %}!
+        Welcome {% if(g.authedUser!=None) %}{{ g.authedUser.name }}{% endif %}!
     </h1>
 
 
-    {% if user == None %}
+    {% if g.authedUser == None %}
         <a href="/auth/login">Login</a>
         <a href="/auth/register">Register</a>
     {% endif %}
 
-    {% if user != None %}
+    {% if g.authedUser != None %}
         <a href="/logout">Logout</a>
     {% endif %}
 

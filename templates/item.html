@@ -19,7 +19,7 @@
         返回列表
     </a>
 
-    {% if user != None and user.user_type==1 %}
+    {% if g.authedUser != None and g.authedUser.user_type==1 %}
 
         <form action="" method="post">
             <input type="hidden" value="delete" name="action">

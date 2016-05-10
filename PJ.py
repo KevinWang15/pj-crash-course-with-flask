@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template, session, request, redirect, flash
+from flask import Flask, render_template, session, request, redirect, flash, g
+
 import mysql.connector
 import json
 import hashlib
@@ -21,6 +22,18 @@ def get_user(user_id):
     else:
         user = result[0]
         return {"id": user[0], "name": user[1], "password": user[2], "user_type": user[3]}
+
+
+def get_authed_user():
+    return get_user(session.get('user_id', None))
+
+
+@app.before_request
+def before_request():
+    # g 可以理解为在所有的Jinja模板中可访问的“全局空间”，
+    # 在每次request开始时，获得当前已Login的用户
+    # 在所有模板中，就可以用 {{ g.authedUser }} 来访问当前用户了！
+    g.authedUser = get_authed_user()
 
 
 def get_post(post_id):
@@ -73,11 +86,7 @@ def page_form_post():
 
 @app.route('/')
 def page_index():
-    return render_template('welcome.html', user=getCurrentlyLoggedInUser())
-
-
-def getCurrentlyLoggedInUser():
-    return get_user(session.get('user_id', None))
+    return render_template('welcome.html')
 
 
 @app.route('/list')
@@ -90,14 +99,14 @@ def page_list():
     for (id, title, content, time) in cursor.fetchall():
         list.append({"id": id, "title": title, "content": content, "time": time})
 
-    return render_template('list.html', list=list, user=getCurrentlyLoggedInUser())
+    return render_template('list.html', list=list)
 
 
 @app.route("/list", methods=["POST"])
 def page_list_post():
     if request.form['delete'] != None:
 
-        user = getCurrentlyLoggedInUser()
+        user = get_authed_user()
         if user['user_type'] != 1:
             flash(u"No privilege", 'error')
             return redirect('/list')
@@ -116,14 +125,14 @@ def page_list_post():
 @app.route("/item/<id>")
 def page_item(id):
     post = get_post(id)
-    return render_template("item.html", post=post, user=getCurrentlyLoggedInUser())
+    return render_template("item.html", post=post)
 
 
 @app.route("/item/<id>", methods=["POST"])
 def page_item_post(id):
     if request.form['action'] == 'delete':
 
-        user = getCurrentlyLoggedInUser()
+        user = get_authed_user()
         if user['user_type'] != 1:
             flash(u"No privilege", 'error')
             return redirect('/item/' + id)
