@@ -72,53 +72,48 @@ def page_form():
 def page_form_post():
     if (len(request.form['title']) < 5):
         flash(u'标题太短了！', 'error')
-        return redirect('/')
+        return redirect('/form')
 
-    flash(u'添加成功！标题是' + request.form['title'], 'success')
+    flash(u'添加成功！', 'success')
 
     cursor = dbConnection.cursor();
     cursor.execute("INSERT into post (title,content,user_id,time) values (%s,%s,%s,now())",
                    [request.form['title'], request.form['content'], session['user_id']])
 
-    return redirect('/form')
+    return redirect('/')
 
 
 @app.route('/')
-def page_index():
-    return render_template('welcome.html')
-
-
-@app.route('/list')
 def page_list():
     cursor = dbConnection.cursor()
-    cursor.execute('select id,title,content,time from `post` order by id desc')
+    cursor.execute('select id,title,time from `post` order by id desc')
 
     list = []
 
-    for (id, title, content, time) in cursor.fetchall():
-        list.append({"id": id, "title": title, "content": content, "time": time})
+    for (id, title, time) in cursor.fetchall():
+        list.append({"id": id, "title": title, "time": time})
 
     return render_template('list.html', list=list)
 
 
-@app.route("/list", methods=["POST"])
+@app.route("/", methods=["POST"])
 def page_list_post():
     if request.form['delete'] != None:
 
         user = get_authed_user()
         if user['user_type'] != 1:
             flash(u"No privilege", 'error')
-            return redirect('/list')
+            return redirect('/')
 
         cursor = dbConnection.cursor()
         cursor.execute('delete from post where id = %s', [request.form['delete']])
 
         flash(u"删除成功！", 'success')
-        return redirect('/list')
+        return redirect('/')
 
     else:
         flash(u"action not supported", 'error')
-        return redirect('/list')
+        return redirect('/')
 
 
 @app.route("/item/<id>")
@@ -140,7 +135,7 @@ def page_item_post(id):
         cursor.execute('delete from post where id = %s', [id])
 
         flash(u"删除成功！", 'success')
-        return redirect('/list')
+        return redirect('/')
 
     else:
         flash(u"action not supported", 'error')
@@ -182,13 +177,26 @@ def page_login_post():
 
 @app.route('/auth/register', methods=["POST"])
 def page_register_post():
+    if len(request.form['username']) < 3:
+        flash(u'用户名太短了！', 'error')
+        return redirect('/auth/register')
+
     if request.form['password'] != request.form['password-repeat']:
         flash(u"两次密码不一致", 'error')
         return redirect('/auth/register')
 
-    # 判断是否用户名已经存在
-    # query判断
-    # flash(u"用户已经存在！！", 'error')
+    if len(request.form['password']) < 6:
+        flash(u'密码太短了！', 'error')
+        return redirect('/auth/register')
+
+    cursor = dbConnection.cursor()
+
+    cursor.execute('select count(1) from `user` where name=%s',
+                   [request.form['username']])
+
+    if cursor.fetchall()[0][0] > 0:
+        flash(u'用户名已经被注册！', 'error')
+        return redirect('/auth/register')
 
     cursor = dbConnection.cursor()
 

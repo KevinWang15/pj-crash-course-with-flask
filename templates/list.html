@@ -1,13 +1,41 @@
 {% extends "base.html" %}
 
+{% block title %}
+    Welcome!
+{% endblock %}
 
 {% block body %}
+
+
+    <h3>
+        {% if(g.authedUser!=None) %}
+            You are logged in as {{ g.authedUser.name }}
+        {% else %}
+            Hello, guest
+        {% endif %}
+    </h3>
+
+    <a href="/form">New Post</a>
+
+
+    {% if g.authedUser == None %}
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register">Register</a>
+    {% endif %}
+
+    {% if g.authedUser != None %}
+        <a href="/logout">Logout</a>
+    {% endif %}
+
+    <hr>
+
+
     <ol>
         {% for item in list %}
             <li>
-                <a href="/item/{{ item.id }}">
-                    {{ item.title }}
-                </a>
+                <a href="/item/{{ item.id }}">{{ item.title }}</a>
+
+                <span>{{ item.time }}</span>
 
                 {% if g.authedUser != None and g.authedUser.user_type==1 %}
                     <form action="" method="post">
@@ -21,12 +49,4 @@
             </li>
         {% endfor %}
     </ol>
-
-    <a href="/">
-        返回主页
-    </a>
-
-    <a href="/form" style="margin-left: 10px;">
-        发帖
-    </a>
 {% endblock %}
