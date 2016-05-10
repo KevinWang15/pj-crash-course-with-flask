@@ -11,7 +11,7 @@
         {{ post.name }} 发布于 {{ post.time }}
     </h5>
 
-    <pre>{{ post.content }}</pre>
+    <pre style="white-space: pre-line">{{ post.content }}</pre>
 
     {% if g.authedUser != None and g.authedUser.user_type==1 %}
 
@@ -41,7 +41,7 @@
                     </form>
                 {% endif %}
             </h4>
-            <p style="padding-left: 20px;white-space: pre;line-height: 1.2em">{{ reply[0] }}</p>
+            <p style="padding-left: 20px;white-space: pre-line;line-height: 1.2em">{{ reply[0] }}</p>
         </div>
     {% endfor %}
 

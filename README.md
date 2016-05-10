@@ -27,14 +27,15 @@
    确定python --version中显示的版本为2.7
 
 2. pip install flask
-3. pip install jinja2
 
 检查Path环境变量是否包括Python目录
 [没有安装PIP？下载地址](http://python-packaging-user-guide.readthedocs.io/en/latest/installing/#install-pip-setuptools-and-wheel)
 
 #RTFM
 [**Flask** http://flask.pocoo.org/docs/0.10/](http://jinja.pocoo.org/docs/)
+
 [**Jinja2 (template engine)** http://jinja.pocoo.org/docs/](http://jinja.pocoo.org/docs/)
+
 [**Python Database API Specification v2.0 (PEP 249)** http://www.python.org/dev/peps/pep-0249/](http://www.python.org/dev/peps/pep-0249/)
 
 # 用PyCharm新建Flask工程
