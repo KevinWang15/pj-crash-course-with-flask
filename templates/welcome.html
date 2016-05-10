@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Welcome!
+{% endblock %}
+
+{% block body %}
+
+    <h1>
+        Welcome {% if(user.name!=None) %}{{ user.name }}{% endif %}!
+    </h1>
+
+
+    {% if user == None %}
+        <a href="/auth/login">Login</a>
+        <a href="/auth/register">Register</a>
+    {% endif %}
+
+    {% if user != None %}
+        <a href="/logout">Logout</a>
+    {% endif %}
+
+    <hr>
+
+    <a href="/list">List</a>
+    <a href="/form">New Post</a>
+
+
+{% endblock %}

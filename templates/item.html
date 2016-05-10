@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+    <h1>
+        {{ post.title }}
+    </h1>
+
+    <p>
+        {{ post.name }} 发布于 {{ post.time }}
+    </p>
+
+    <p>
+        {{ post.content }}
+    </p>
+
+    <a href="/list">
+        返回列表
+    </a>
+
+    {% if user != None and user.user_type==1 %}
+
+        <form action="" method="post">
+            <input type="hidden" value="delete" name="action">
+            <button style="margin-left: 4px;">
+                删除本帖
+            </button>
+        </form>
+
+    {% endif %}
+
+{% endblock %}

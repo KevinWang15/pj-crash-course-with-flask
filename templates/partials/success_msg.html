@@ -1,0 +1,11 @@
+{% with succesess = get_flashed_messages(category_filter=["success"]) %}
+    {% if succesess %}
+        <div class="success">
+            <ul>
+                {%- for msg in succesess %}
+                    <li>{{ msg }}</li>
+                {% endfor -%}
+            </ul>
+        </div>
+    {% endif %}
+{% endwith %}

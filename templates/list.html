@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+    <ol>
+        {% for item in list %}
+            <li>
+                <a href="/item/{{ item.id }}">
+                    {{ item.title }}
+                </a>
+
+                {% if user != None and user.user_type==1 %}
+                    <form action="" method="post">
+                        <input type="hidden" value="{{ item.id }}" name="delete">
+                        <button style="margin-left: 4px;">
+                            X
+                        </button>
+                    </form>
+                {% endif %}
+
+            </li>
+        {% endfor %}
+    </ol>
+
+    <a href="/">
+        返回主页
+    </a>
+
+    <a href="/form" style="margin-left: 10px;">
+        发帖
+    </a>
+{% endblock %}
