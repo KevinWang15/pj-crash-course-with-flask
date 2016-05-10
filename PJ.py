@@ -12,16 +12,30 @@ app.secret_key = '123456'
 dbConnection = mysql.connector.connect(host='127.0.0.1', port=3306, password="", user='root', database='pj')
 
 
-def get_user(user_id):
-    if (user_id == None): return None
-    cursor = dbConnection.cursor()
-    cursor.execute('select id,name,password,user_type from `user` where id=%s', [user_id])
-    result = cursor.fetchall()
-    if len(result) == 0:
-        return None
-    else:
-        user = result[0]
-        return {"id": user[0], "name": user[1], "password": user[2], "user_type": user[3]}
+def get_model(table_name, attributes, sql_override=None):
+    def func(id):
+        if (id == None): return None
+
+        cursor = dbConnection.cursor()
+        cursor.execute(sql_override if sql_override is not None else 'select ' + ','.join(
+            attributes) + ' from ' + table_name + ' where id=%s',
+                       [id])
+        result = cursor.fetchall()
+        if len(result) == 0:
+            return None
+        else:
+            ret = {}
+            for i in range(0, len(attributes)):
+                ret[attributes[i]] = result[0][i]
+
+            return ret
+
+    return func
+
+
+get_user = get_model('user', ['id', 'name', 'password', 'user_type'])
+get_post = get_model('post', ['id', 'title', 'content', 'time', 'name'],
+                     'select post.id,title,content,time,user.name from `post` left join user on user.id = user_id where post.id=%s')
 
 
 def get_authed_user():
@@ -34,21 +48,6 @@ def before_request():
     # 在每次request开始时，获得当前已Login的用户
     # 在所有模板中，就可以用 {{ g.authedUser }} 来访问当前用户了！
     g.authedUser = get_authed_user()
-
-
-def get_post(post_id):
-    if (post_id == None): return None
-    cursor = dbConnection.cursor()
-    cursor.execute(
-        'select post.id,title,content,time,user.name from `post` left join user on user.id = user_id where post.id=%s',
-        [post_id])
-    result = cursor.fetchall()
-
-    if len(result) == 0:
-        return None
-    else:
-        post = result[0]
-        return {"id": post[0], "title": post[1], "content": post[2], "time": post[3], "name": post[4]}
 
 
 @app.route('/simulate-login')
