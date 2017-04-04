@@ -1,4 +1,4 @@
-#说明
+# 说明
 本教程是给完全没有使用经验的Flask新手看，有基础的同学可以略过。原理并不是讲得很透彻，也不是最佳实践，很多代码甚至写得比较丑陋。但本教程的目的是：让使用者一个bare minimum的新知识，并在这些新知识的基础上比较快速地用Python开发出一个网站。
 
 本教程包含：
@@ -22,23 +22,23 @@
 预计学习时间为4小时。
 
 
-#安装
+# 安装
 1. Python 2.7
    确定python --version中显示的版本为2.7
 
 2. pip install flask
 
 检查Path环境变量是否包括Python目录
-[没有安装PIP？下载地址](http://python-packaging-user-guide.readthedocs.io/en/latest/installing/#install-pip-setuptools-and-wheel)
+[没有安装PIP？下载地址](http://python-packaging-user-guide.readthedocs.io/en/latest/installing/# install-pip-setuptools-and-wheel)
 
-#RTFM
+# RTFM
 [**Flask** http://flask.pocoo.org/docs/0.10/](http://jinja.pocoo.org/docs/)
 
 [**Jinja2 (template engine)** http://jinja.pocoo.org/docs/](http://jinja.pocoo.org/docs/)
 
 [**Python Database API Specification v2.0 (PEP 249)** http://www.python.org/dev/peps/pep-0249/](http://www.python.org/dev/peps/pep-0249/)
 
-# 用PyCharm新建Flask工程
+#  用PyCharm新建Flask工程
 记得Python Interpreter选2.7的
 快捷键```Shift+F10```运行程序
 按```Ctrl+F5```重新运行。
@@ -118,9 +118,9 @@ object就算是一个很复杂的对象也可以一次性打出所有信息。
 	u'添加成功！标题是' + request.form['title']
 
 # 后端路由、模板引擎
-##文档地址
+## 文档地址
 http://flask.pocoo.org/docs/0.10/quickstart/#routing
-##路由(router)的概念
+## 路由(router)的概念
 简单理解为：声明每当用户访问某网址(如/list)时，要触发什么程序（函数）。
 
 	@app.route('/')
@@ -154,15 +154,15 @@ PJ推荐简单粗暴的写法：每一个页面写一个router,直接在回调�
 
 就这样，多添加一些路由。
 
-##模板引擎
+## 模板引擎
 
 http://flask.pocoo.org/docs/0.10/quickstart/#rendering-templates
 
 直接return内联string，非常没有表现力，把整个网页的HTML（几百行）都放到return里？代码会杂乱不堪。模板引擎就是为了解决这个问题。
 
-###模板引擎的构成
+### 模板引擎的构成
 
-####1.一套模板语言
+#### 1.一套模板语言
 
         <!doctype html>
         <title>Hello from Flask</title>
@@ -178,7 +178,7 @@ http://flask.pocoo.org/docs/0.10/quickstart/#rendering-templates
 HTML语言？是一棵树（由<directive></directive>嵌套而成的树），定义了网页的**结构与内容**。
 
 
-####2.渲染模板的API
+#### 2.渲染模板的API
 
 PJ简单粗暴，只要掌握这一个API即可（注意要先import）
 
@@ -211,7 +211,7 @@ PJ简单粗暴，只要掌握这一个API即可（注意要先import）
 
 	Welcome, Kevin!
 
-#####{% directive %}
+##### {% directive %}
 这也非常有用，在PJ中要掌握：
 
 if
@@ -317,7 +317,7 @@ http://www.python.org/dev/peps/pep-0249/
 
 鉴于Informix每次开启都要卡10秒钟，很影响开发心情，可以搭一个本地的MySQL，做完后再改成远端的Informix。
 
-##Informix 演示
+## Informix 演示
 
     import jaydebeapi
 
@@ -334,7 +334,7 @@ http://www.python.org/dev/peps/pep-0249/
             print col
         print "\n"
 
-##MySQL 演示
+## MySQL 演示
 Connector安装：http://dev.mysql.com/downloads/connector/python/
 32位/64位要根据自己装的python选择，选Python 2.7的
 
@@ -368,8 +368,8 @@ Connector安装：http://dev.mysql.com/downloads/connector/python/
 是不是超级简单。。依样画葫芦就行了。
 不管是查询数据（SELECT）还是添加/删除（INSERT/DELETE），都用```.execute()```方法。
 
-##两个新概念：
-###cursor
+## 两个新概念：
+### cursor
 一次数据库查询（广义）操作的上下文，可用来执行查询、读取数据等。
 
 用cursor执行query、读取全部数据，只要调用
@@ -394,7 +394,7 @@ Connector安装：http://dev.mysql.com/downloads/connector/python/
 
 或者直接把它传到模板引擎的参数绑定中
 
-###参数绑定
+### 参数绑定
 书上应该也有提过，用来防SQL注入、提高效率的。
 
 
@@ -411,19 +411,19 @@ execute的第二个参数是个数组，这个数组会被绑定到query中，�
 注意：这里即使是数字，也不要写%d,不管什么，只要是参数就写%s
 
 # 用户注册与登入、鉴权
-##HTTP协议
-###请求(request)和响应(response)
+## HTTP协议
+### 请求(request)和响应(response)
 HTTP分请求和反馈两个部分。
 请求是指用户发送给服务器的数据，
 响应是指服务器发送给用户的数据。
-###无状态
+### 无状态
 HTTP是一个```无状态```的协议，就是说，每次请求都与上次是无关的。（不像普通程序，需要在内存中存储当前状态）
 
-##使用Session登入
+## 使用Session登入
 因为HTTP是无状态的，所以为了确定用户标识，必须依靠一个叫做Session(会话)的东西。会话其实很简单：每个用户第一次访问网站，都会被赋予一个SessionID,这个SessionID是唯一的，用来确认用户本次访问的身份（相当于HTTP无状态的一个补偿，用过ID，人工确定其状态）。用户在访问网站的过程中，每次访问一个网页，都要（在请求中）把SessionID告诉服务器。服务器通过SessionID就可以查询到用户的身份了。
 SessionID具体是怎么做的呢？是通过Cookie传给浏览器的，浏览器再读Cookie发给服务器。HTTP协议规定，访问一个域名时，必须把该域名下所有的Cookie发送给服务器（如访问http://www.baidu.com/就要把百度留下的Cookie发回去）这种机制就确保了服务器能通过SessionID确定用户身份（了解即可）
 
-####TL;DR version
+#### TL;DR version
 在Python中使用Session就可以做到登入了!
 但是使用Session之前，要先设置个Flask用于加密Session的密码
 	
@@ -460,7 +460,7 @@ SessionID具体是怎么做的呢？是通过Cookie传给浏览器的，浏览�
     def page_index():
         return render_template('welcome.html', user=get_user(session.get('user_id', None)))
 
-##鉴权
+## 鉴权
 鉴权（Authorization）是判断用户是否有权限执行某操作的过程。比如要删除一个帖子，只有管理员才有权限。最简单的鉴权其实非常容易，只要在数据库中加一个user_type，0表示普通用户，1表示管理员。然后在删除帖子时判断下(用之前写的get_user helper函数获得user_type)，没有权限弹出一个错误阻止继续进行就行了。（怎么抛出错误在业务逻辑中说）
 
 PJ中也只要用这种最简单的鉴权就够了
@@ -469,7 +469,7 @@ PJ中也只要用这种最简单的鉴权就够了
 # 用户输入信息的处理、业务逻辑
 业务逻辑是处理用户输入到查询数据库到做出一系列判断到更新数据库到返回给用户信息这个过程中逻辑的统称。
 用户输入信息的处理，即Request的处理，PJ中大概要用到两种：
-##1.URL中的信息（如：查看文章详情 /page/5）
+## 1.URL中的信息（如：查看文章详情 /page/5）
 URL中的信息也是Request中的输入信息，虽然这个信息不会是用户手工输入的（而是点击链接得到的）
 HTTP有两种动词：```GET```和```POST```这种是属于GET，参数在url中，处理方法很简单：在路由中定义一个模板
 
@@ -479,7 +479,7 @@ HTTP有两种动词：```GET```和```POST```这种是属于GET，参数在url中
 
 Flask非常聪明，在url中以尖括号括起来的，会捕获并当成参数传给回调函数
 
-##2.表单中的信息
+## 2.表单中的信息
 如果用户要输入某些东西并提交（比如发个帖子），表单提交，一般是使用```POST```的HTTP请求(如果要传输数据，非常不建议GET)。看一个表单：
 
 Python代码：
@@ -520,7 +520,7 @@ form.html：
 
 上面这个会打出所有的用户输入
 
-##显示成功/错误信息
+## 显示成功/错误信息
 http://flask.pocoo.org/docs/0.10/quickstart/#message-flashing
 成功/错误信息一般不会直接在POST路由中打出。而是被暂存在Session中。POST路由业务逻辑执行完后，往往是把用户redirect到另一个页面。在那个页面，检查Session中有没有该消息。有的话则打出并删除那个消息。这种机制叫做Flashing
 
@@ -567,14 +567,14 @@ Flask有很好的Flashing支持。修改之前写的代码
 
 # CSS美化界面
 
-##通过CSS做样式
+## 通过CSS做样式
 两种写CSS的方法：
-###1.内联CSS
+### 1.内联CSS
 如：
 
 	<p style="color:red;font-size:20px"></p>
 
-###2.通过class
+### 2.通过class
 如：
 	
     <p class="title">ABC</p>
@@ -587,7 +587,7 @@ CSS教程
 
 * http://www.w3schools.com/css/
 
-##Bootstrap
+## Bootstrap
 
 先引入Bootstrap的CSS
 
